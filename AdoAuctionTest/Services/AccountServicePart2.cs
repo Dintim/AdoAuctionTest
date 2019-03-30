@@ -11,7 +11,7 @@ namespace AdoAuctionTest.Services
 {
     public partial class AccountService
     {
-        public bool IsEmailAndPasswordValid(string email, string password)
+        public bool IsEmailAndPasswordValid(string email, string password, out string message)
         {
             DataSet identityDataSet = new DataSet();
 
@@ -29,7 +29,10 @@ namespace AdoAuctionTest.Services
                     SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
                     adapter.Fill(identityDataSet);
                     if (identityDataSet.Tables[0].Rows.Count == 0)
-                        return false;                        
+                    {
+                        message = $"There is no email in database like {email}";
+                        return false;
+                    }
                     
                     identityDataSet.Clear();
                     string selectByEmailAndPassword = $"select * from {usersTable} u, {userPasswordTable} p " +
@@ -52,11 +55,13 @@ namespace AdoAuctionTest.Services
                         table.Rows[0]["FailedSignInCount"] = cnt + 1;
                         adapter.Update(tmp);
 
+                        message = "Invalid password, try again";
                         return false;                        
                     }
                 }
             }
 
+            message = "Valid email and password";
             return true;
         }
     }
