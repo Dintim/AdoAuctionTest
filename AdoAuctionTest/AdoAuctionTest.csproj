@@ -61,6 +61,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\AccountServicePart2.cs" />
     <Compile Include="ViewModels\ChangeUserPasswordViewModel.cs" />
     <Compile Include="ViewModels\OpenOrganizationViewModel.cs" />
   </ItemGroup>

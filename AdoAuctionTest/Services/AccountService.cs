@@ -5,6 +5,7 @@ using AdoAuctionTest.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -15,7 +16,7 @@ using System.Transactions;
 
 namespace AdoAuctionTest.Services
 {
-    public class AccountService
+    public partial class AccountService
     {
         public void OpenOrganization(OpenOrganizationViewModel viewModel)
         {
@@ -29,20 +30,18 @@ namespace AdoAuctionTest.Services
             string userSignInTable = "[dbo].[ApplicationUserSignInHistories]";
             string userPasswordTable = "[dbo].[ApplicationUserPasswordHistories]";
             string associatedEmpId = string.Empty;
-
-            string applicationConnectionString = @"Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=Auction.ApplicationDb;Data Source=DM-ПК\SQLEXPRESS";
-            string identityConnectionString = @"Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=Auction.IdentityDb;Data Source=DM-ПК\SQLEXPRESS";
+            
             GeoLocationInfo geoLocationInfo = GetGeolocationInfo();
 
             using (TransactionScope transactionScope = new TransactionScope())
             {
                 try
                 {
-                    using (SqlConnection applicationConnection = new SqlConnection(applicationConnectionString))
+                    using (SqlConnection applicationConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["AuctionDbConnectionString"].ConnectionString))
                     {                        
                         applicationConnection.Open();
                         string selectOrganizationByIdentificatorsSql = $"select * from {organizationsTable} " +
-                            $"where [IdentificationNumber] = {viewModel.OrganizationIdentificationNumber}";                        
+                            $"where [IdentificationNumber] = '{viewModel.OrganizationIdentificationNumber}'";                        
 
                         //формируем адаптер для выгрузки данных в датасет
                         using (SqlDataAdapter applicationAdapter = new SqlDataAdapter(selectOrganizationByIdentificatorsSql, applicationConnection))
@@ -106,7 +105,7 @@ namespace AdoAuctionTest.Services
                         
                     }
 
-                    using (SqlConnection identityConnection = new SqlConnection(identityConnectionString))
+                    using (SqlConnection identityConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["IdentityDbConnectionString"].ConnectionString))
                     {
                         identityConnection.Open();
                         string selectUserByEmailSql = $"select * from {userTable} " +
@@ -203,17 +202,12 @@ namespace AdoAuctionTest.Services
 
         public void ChangeUserPassword(ChangeUserPasswordViewModel viewModel)
         {
-            //if (viewModel.newPassword != viewModel.newPasswordConfirmation)
-            //    throw new ApplicationException("Passwords do not match");
-            string identityConnectionString = @"Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=Auction.IdentityDb;Data Source=DM-ПК\SQLEXPRESS";
-
             DataSet identityDataSet = new DataSet();
-            string userTable = "[dbo].[ApplicationUsers]";
-            //string userSignInTable = "[dbo].[ApplicationUserSignInHistories]";
+            string userTable = "[dbo].[ApplicationUsers]";            
             string userPasswordTable = "[dbo].[ApplicationUserPasswordHistories]";
             string userId = string.Empty;
 
-            using (SqlConnection identityConnection = new SqlConnection(identityConnectionString))
+            using (SqlConnection identityConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["IdentityDbConnectionString"].ConnectionString))
             {
                 identityConnection.Open();
                 

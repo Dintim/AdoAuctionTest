@@ -25,19 +25,26 @@ namespace AdoAuctionTest
             //    Password="qwerty",
             //    PasswordConfirmation= "qwerty"
             //};
-            ChangeUserPasswordViewModel viewModel = new ChangeUserPasswordViewModel()
-            {
-                Email = "ddd@mail.ru",
-                oldPassword = "qwerty",
-                newPassword = "qwerty123",
-                newPasswordConfirmation = "qwerty123"
-            };
-            AccountService s = new AccountService();
-            //s.OpenOrganization(viewModel);
-            s.ChangeUserPassword(viewModel);
-
+            //ChangeUserPasswordViewModel viewModel = new ChangeUserPasswordViewModel()
+            //{
+            //    Email = "ddd@mail.ru",
+            //    oldPassword = "qwerty123",
+            //    newPassword = "123qwerty",
+            //    newPasswordConfirmation = "123qwerty"
+            //};
+            //AccountService s = new AccountService();
+            ////s.OpenOrganization(viewModel);
+            //s.ChangeUserPassword(viewModel);
 
             //Console.WriteLine(s.GetGeolocationInfo().ip.ToString());
+
+            string email = "fff@mail.ru";
+            string password = "123qwerty";
+
+            AccountService service = new AccountService();
+            bool check = service.IsUserExist(email, password);
+            Console.WriteLine(check);
+
         }
     }
 }
