@@ -38,12 +38,18 @@ namespace AdoAuctionTest
 
             //Console.WriteLine(s.GetGeolocationInfo().ip.ToString());
 
-            string email = "fff@mail.ru";
-            string password = "123qwerty";
+            //string email = "ddd@mail.ru";
+            //string password = "123qwerty";
+            //AccountService service = new AccountService();
+            //string msg = "";
+            //bool check = service.IsEmailPasswordValid(email, password, out msg);
+            //Console.WriteLine(msg);
 
             AccountService service = new AccountService();
-            bool check = service.IsUserExist(email, password);
-            Console.WriteLine(check);
+            //Console.WriteLine(service.AutorizationSecurity("93293056-DF3A-4CF5-89B7-FD4332C560AE").ToShortDateString());
+            //int cnt = 5;
+            //service.AutorizationSecurity("93293056-DF3A-4CF5-89B7-FD4332C560AE", out cnt);
+            //Console.WriteLine(cnt);
 
         }
     }
