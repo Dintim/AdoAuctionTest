@@ -11,7 +11,7 @@ namespace AdoAuctionTest.Services
 {
     public partial class AccountService
     {
-        public bool IsEmailAndPasswordValid(string email, string password, out string message)
+        public bool IsEmailPasswordValid(string email, string password, out string message)
         {
             DataSet identityDataSet = new DataSet();
 
