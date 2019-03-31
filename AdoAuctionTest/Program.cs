@@ -21,7 +21,8 @@ namespace AdoAuctionTest
 
             string userId = "93293056-DF3A-4CF5-89B7-FD4332C560AE";
             string userPhone = "+777777777777";
-            service.AutorizationSecurity(userId, userPhone);
+            string message = "";
+            service.AutorizationSecurity(userId, userPhone, out message);
 
 
         }

@@ -103,7 +103,7 @@ namespace AdoAuctionTest.Services
             return true;
         }
 
-        public void AutorizationSecurity(string userId, string userPhone)
+        public bool AutorizationSecurity(string userId, string userPhone, out string message)
         {
             DataSet identityDataSet = new DataSet();
             
@@ -123,8 +123,12 @@ namespace AdoAuctionTest.Services
                     //проверяем, не заблокирован ли аккаунт пользователя
                     SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
                     adapter.Fill(identityDataSet);
-                    if (identityDataSet.Tables[0].Rows.Count == 0)                        
-                        throw new ApplicationException("Account is blocked");
+                    if (identityDataSet.Tables[0].Rows.Count == 0)
+                    {
+                        message= "Account is blocked",
+                        return false;
+                    }
+                        //throw new ApplicationException("Account is blocked");
                     
                     setupDate = Convert.ToDateTime(identityDataSet.Tables[0].Rows[0]["SetupDate"].ToString());
 
@@ -163,7 +167,11 @@ namespace AdoAuctionTest.Services
                         if (currentCoordinate.GetDistanceTo(tmp) / 1000 > 2000)
                         {
                             if (!CheckUserViaSms(userPhone))
-                                throw new ApplicationException("This is not your account!");
+                            {
+                                message = "This is not your account!";
+                                return false;
+                            }
+                                //throw new ApplicationException("This is not your account!");
 
                             break;
                         }
@@ -178,13 +186,26 @@ namespace AdoAuctionTest.Services
                     commandBuilder = new SqlCommandBuilder(adapter);
                     adapter.Fill(identityDataSet);
                     if (identityDataSet.Tables[0].Rows.Count > 50)
-                        throw new ApplicationException("User has to change password");
+                    {
+                        message = "User has to change password";
+                        return false;
+                    }
+                        //throw new ApplicationException("User has to change password");                    
 
                 }
             }
 
+            message = "";
+            return true;
             
         }
+
+        public void CeoAccountService(string userId)
+        {
+            DataSet applicationDataSet = new DataSet();
+            
+        }
+
 
         public bool CheckUserViaSms(string userPhone)
         {
